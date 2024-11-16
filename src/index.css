@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@font-face {
+  font-family: 'clabFont';
+  src: url('/src/assets/fonts/Clab\ Personal\ Use-Bold.otf') format('opentype'),
+    url('/src/assets/fonts/Clab\ Personal\ Use-BoldItalic.otf') format('opentype');
+}
+
+* {
+  box-sizing: border-box;
+}

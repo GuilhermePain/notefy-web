@@ -14,7 +14,7 @@ import { FaPlus } from "react-icons/fa6";
 interface INote {
     id: string;
     title: string;
-    body: string
+    body: string;
 }
 
 const MyNotes = () => {

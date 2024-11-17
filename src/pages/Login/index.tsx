@@ -110,6 +110,7 @@ const Login = () => {
               )}
             </div>
             <Button
+              type="primary"
               text="Entrar"
               width="w-full"
               padding='p-2'

@@ -12,11 +12,12 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyNotes from "./pages/MyNotes";
 import MyNotesWrite from "./pages/MyNotesWrite";
+import { Toaster } from "sonner";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <LandingPage/>,
+    element: <LandingPage />,
   },
   {
     path: "/entrar",
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/cadastro",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/esqueceusuasenha",
@@ -47,5 +48,12 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster position="top-center" toastOptions={{
+      style: {
+        background: '#6F3AB6',
+        color: 'white'
+      }
+    }}
+    />
   </React.StrictMode>
 );

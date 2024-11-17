@@ -30,7 +30,7 @@ const ForgotPassword = () => {
             }
             setMessage("Link enviado, verifique seu email. (Tente novamente em 30s)");
             setSuccess(true);
-            setCounter(30); 
+            setCounter(30);
         } catch (error) {
             if (error instanceof Error) {
                 setMessage(error.message);
@@ -90,6 +90,7 @@ const ForgotPassword = () => {
                             )}
                         </div>
                         <Button
+                            type="primary"
                             text="Enviar"
                             width="w-full"
                             padding='p-2'

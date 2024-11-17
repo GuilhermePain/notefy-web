@@ -15,6 +15,7 @@ const LandingPage = () => {
           </div>
           <Link to='/entrar'>
             <Button
+              type='primary'
               text='Comece agora gratuitamente!'
               padding="px-6 py-2"
             />

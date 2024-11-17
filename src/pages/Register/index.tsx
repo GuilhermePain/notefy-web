@@ -137,6 +137,7 @@ const Register = () => {
                             )}
                         </div>
                         <Button
+                            type='primary'
                             text="Cadastrar"
                             width="w-full"
                             padding='p-2'

@@ -7,7 +7,7 @@ import { loginUser } from "../../services/authService";
 import { validateEmail, validatePasswordLogin } from "../../utils/fieldsValidation";
 import { MdEmail } from "react-icons/md";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -102,8 +102,8 @@ const Login = () => {
                   )}                </div>
               </div>
               <p className="text-right">
-                <a className="text-[#6F3AB6]"
-                  href="/esqueceusuasenha">Esqueceu sua senha?</a>
+                <Link className="text-[#6F3AB6]"
+                  to="/esqueceusuasenha">Esqueceu sua senha?</Link>
               </p>
               {errorMessage && (
                 <p className="text-red-500 text-center mb-4">{errorMessage}</p>
@@ -116,7 +116,7 @@ const Login = () => {
               padding='p-2'
             />
             <p className="text-center mt-6">
-              Não tem uma conta? <a href="/cadastro" className="text-[#6F3AB6]">Cadastre-se</a>
+              Não tem uma conta? <Link to="/cadastro" className="text-[#6F3AB6]">Cadastre-se</Link>
             </p>
           </form>
         </aside>

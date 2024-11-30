@@ -12,6 +12,7 @@ import { useJwt } from "react-jwt";
 import Modal from "../../components/Modal";
 import { MdStickyNote2 } from "react-icons/md";
 import { toast } from "sonner";
+import { nullField } from "../../utils/fieldsValidation";
 
 interface IDecodedToken {
     sub: string;
@@ -34,13 +35,13 @@ const MyNotes = () => {
     const [notes, setNotes] = useState<INote[]>([]);
     const [noteTitle, setNoteTitle] = useState('');
     const [search, setSearch] = useState<string>('');
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isOpenModalCreateNote, setIsOpenModalCreateNote] = useState<boolean>(false);
     const [isOpenModalUser, setIsOpenModalUser] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!token || isExpired) {
-            alert("Sessão expirada. Por favor, faça login novamente.");
             navigate("/entrar");
             return;
         }
@@ -81,6 +82,12 @@ const MyNotes = () => {
 
     const createNotes = async () => {
         const title = noteTitle;
+        const titleError = nullField(title, "Título da nota é obrigatório.");
+
+        if(titleError){
+            setErrorMessage(titleError);
+            return;
+        }
 
         try {
             const response = await axios.post('http://localhost:3000/notes/createnote', { title, body: "" }, {
@@ -100,6 +107,11 @@ const MyNotes = () => {
             console.log("Erro ao criar a nota");
         }
     };
+
+    const closeModalCreateNote = () => {
+        setIsOpenModalCreateNote(false);
+        setErrorMessage(null)
+    }
 
     const handleRedirect = (nota: string) => {
         navigate(`/minhasnotas/${nota}`);
@@ -128,7 +140,7 @@ const MyNotes = () => {
                 buttonRight={<Button onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
             />
             <main className="p-5">
-                <div className="w-full flex justify-between items-center">
+                <div className="w-full flex justify-between items-center md:justify-end md:gap-4">
                     <Input
                         type="text"
                         placeholder="Buscar..."
@@ -141,12 +153,12 @@ const MyNotes = () => {
                         text={<FaPlus size={24} />}
                         padding="px-3 py-3"
                         type="primary"
-                        onClick={() => { setIsOpen(true) }}
+                        onClick={() => {setIsOpenModalCreateNote(true) }}
                     />
                 </div>
                 {
                     notes.length > 0 ?
-                        <div className="grid grid-cols-2 gap-3 w-full place-items-center mt-5">
+                        <div className="grid grid-cols-2 gap-3 w-full place-items-center mt-5 md:grid-cols-5">
                             {notes.map((notes) => (
                                 <CardNotes
                                     key={notes.id}
@@ -169,19 +181,26 @@ const MyNotes = () => {
                     </Modal>
                 )
             }
-            {isOpen && (
+            {isOpenModalCreateNote && (
                 <Modal>
                     <h2 className="text-center text-xl font-bold">Criar uma nota</h2>
                     <Input type="text" placeholder={"titulo da nota"} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
+                    {
+                        errorMessage !== null && (
+                            <span className="text-red-500 text-center">
+                                {errorMessage}
+                            </span>
+                        )
+                    }
                     <div className="w-full flex justify-center items-center gap-6">
                         <Button
                             text="Cancelar"
                             padding="py-1 px-6"
-                            onClick={() => setIsOpen(false)}
+                            onClick={closeModalCreateNote}
                         />
                         <Button
                             text="Criar"
-                            icon={<FaPlus />}
+                            iconRight={<FaPlus />}
                             padding="py-1 px-6"
                             type="primary"
                             onClick={createNotes}

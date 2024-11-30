@@ -8,6 +8,7 @@ import Button from "../../components/Button";
 import { FaChevronLeft } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
 import { toast } from "sonner";
+import Modal from "../../components/Modal";
 
 const MyNotesWrite = () => {
     const token = Cookies.get('token');
@@ -15,6 +16,9 @@ const MyNotesWrite = () => {
     const [noteBody, setNoteBody] = useState<string>("");
     const { quill, quillRef } = useQuill();
     const isFirstRender = useRef(true);
+    const [noteChanges, setNoteChanges] = useState<string | null>(null);
+    const [originalNoteBody, setOriginalNoteBody] = useState<string>("");
+    const [isOpenModalCheckIfChangesWereSaved, setIsOpenModalCheckIfChangesWereSaved] = useState<boolean>(false);
 
     const path = window.location.pathname.split("/");
     const id = path[2];
@@ -28,8 +32,9 @@ const MyNotesWrite = () => {
             });
 
             const data = response.data;
-            setNoteTitle(data.title)
+            setNoteTitle(data.title);
             setNoteBody(data.body);
+            setOriginalNoteBody(data.body);
         } catch (error) {
             console.error("Erro ao buscar nota:", error);
         }
@@ -54,40 +59,71 @@ const MyNotesWrite = () => {
             quill.on("text-change", () => {
                 const currentHTML = quill.root.innerHTML;
                 setNoteBody(currentHTML);
+                setNoteChanges(currentHTML);
             });
         }
     }, [quill]);
 
-    // window.addEventListener('beforeunload', (e) => {
-    //     e.preventDefault();
-    // });
+    const checkIfChangesWereSaved = () => {
+        const normalizeContent = (content: string) => {
+            return content.replace(/<p><br><\/p>/g, "").trim();
+        };
+
+        if (normalizeContent(noteChanges || "") !== normalizeContent(originalNoteBody)) {
+            setIsOpenModalCheckIfChangesWereSaved(true);
+        } else {
+            window.location.href = "/minhasnotas";
+        }
+    };
+
 
     const saveNote = async () => {
         const body = noteBody;
 
         try {
             await axios.patch(`http://localhost:3000/notes/${id}`, { body }, {
-                headers : {
+                headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
             toast.success("Nota salva com sucesso!");
-            console.log("Nota salva com sucesso.");
+
+            // Atualizar o estado original após salvar
+            setOriginalNoteBody(body);
+            setNoteChanges(body);
+            setIsOpenModalCheckIfChangesWereSaved(false);
         } catch (error) {
             toast.error("Erro ao salvar nota!");
             console.log("Erro ao salvar nota", error);
         }
     };
 
+
+    const discardChanges = () => {
+        setIsOpenModalCheckIfChangesWereSaved(false);
+        window.location.href = "/minhasnotas"
+    };
+
     return (
         <div className="w-full h-full">
             <Header
-                link="/minhasnotas"
-                buttonLeft={<FaChevronLeft />}
-                buttonRight={<Button type="primary" onClick={saveNote} icon={<FaSave />} padding="px-4 py-2" />}
+                buttonLeft={<Button onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" padding="px-3 py-1" />}
+                buttonRight={<Button type="primary" onClick={saveNote} padding="px-4 py-2" text={<FaSave />} />}
                 title={noteTitle}
             />
             <div ref={quillRef} className="w-full h-full" />
+
+            {isOpenModalCheckIfChangesWereSaved && (
+                <Modal>
+                    <div className="flex flex-col items-center">
+                        <h2 className="font-bold text-xl text-center">Você tem alterações não salvas</h2>
+                        <div className="flex gap-4 mt-4">
+                            <Button text="Descartar" onClick={discardChanges} padding="px-6 py-1" />
+                            <Button text="Salvar" type="primary" padding="px-6 py-1" onClick={saveNote} />
+                        </div>
+                    </div>
+                </Modal>
+            )}
         </div>
     );
 };

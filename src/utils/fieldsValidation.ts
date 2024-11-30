@@ -1,3 +1,11 @@
+export const nullField= (field: string, fieldMessage: string) => {
+    if(!field) {
+        return fieldMessage;
+    }
+
+    return null;
+}
+
 export const validateName = (name: string): string | null => {
     if (!name.trim()) {
         return "Nome é obrigatório."

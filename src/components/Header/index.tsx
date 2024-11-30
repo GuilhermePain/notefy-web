@@ -5,16 +5,15 @@ interface IHeaderProps {
   buttonLeft?: JSX.Element;
   buttonRight?: JSX.Element;
   title?: string;
-  link?: any;
 }
 
-const Header = ({ buttonLeft, buttonRight, title, link }: IHeaderProps) => {
+const Header = ({ buttonLeft, buttonRight, title }: IHeaderProps) => {
   return (
     <header className='shadow-xl'>
       <nav className='w-full flex items-center justify-between p-5'>
-        {buttonLeft ? <Link to={link}>
-          <div className='flex items-center text-[#6F3AB6]'>{buttonLeft} Voltar</div>
-        </Link> :
+        {buttonLeft ?
+          buttonLeft
+          :
           <Link to='/'>
             <div className='flex justify-center items-center gap-1'>
               <img src={imgLogoNotefy} alt="Logo notefy" className='w-10' />

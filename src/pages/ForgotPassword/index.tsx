@@ -4,6 +4,7 @@ import { MdEmail } from "react-icons/md";
 import { FormEvent, useEffect, useState } from "react";
 import { forgotPassword } from "../../services/authService";
 import { validateEmail } from "../../utils/fieldsValidation";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState<string>("");
@@ -97,7 +98,7 @@ const ForgotPassword = () => {
                             disabled={counter > 0} // Desabilitar botão durante o contador
                         />
                         <p className="text-center mt-6">
-                            Já tem uma conta? <a href="/entrar" className="text-[#6F3AB6]">Entrar</a>
+                            Já tem uma conta? <Link to="/entrar" className="text-[#6F3AB6]">Entrar</Link>
                         </p>
                     </form>
                 </aside>

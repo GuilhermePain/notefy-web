@@ -10,7 +10,11 @@ export const registerUser = async (name: string, email: string, password: string
 
         return response.data;
     } catch (error) {
-        return "Erro ao tentar cadastrar-se."
+        if (axios.isAxiosError(error) && error.response) {
+            // Retorna a mensagem de erro específica do servidor
+            return Promise.reject(error.response.data.message || "Erro ao tentar cadastrar-se.");
+        }
+        return Promise.reject("Erro inesperado ao tentar cadastrar-se.");
     }
 };
 

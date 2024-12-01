@@ -11,6 +11,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useJwt } from "react-jwt";
 import Modal from "../../components/Modal";
 import { MdStickyNote2 } from "react-icons/md";
+import { HiPencil } from "react-icons/hi2";
 import { toast } from "sonner";
 import { nullField } from "../../utils/fieldsValidation";
 
@@ -32,6 +33,7 @@ const MyNotes = () => {
     const { decodedToken, isExpired } = useJwt<IDecodedToken>(token || "");
     const [userId, setUserId] = useState<string | null>(null);
     const [userName, setUserName] = useState<string>('');
+    const [userEmail, setUserEmail] = useState<string>('');
     const [notes, setNotes] = useState<INote[]>([]);
     const [noteTitle, setNoteTitle] = useState('');
     const [search, setSearch] = useState<string>('');
@@ -59,8 +61,7 @@ const MyNotes = () => {
                 }
             });
             setUserName(response.data.name);
-            console.log(userName);
-
+            setUserEmail(response.data.email);
         } catch (error) {
             console.log("Erro ao buscar nome do usuário da sessão.");
         }
@@ -84,7 +85,7 @@ const MyNotes = () => {
         const title = noteTitle;
         const titleError = nullField(title, "Título da nota é obrigatório.");
 
-        if(titleError){
+        if (titleError) {
             setErrorMessage(titleError);
             return;
         }
@@ -153,7 +154,7 @@ const MyNotes = () => {
                         text={<FaPlus size={24} />}
                         padding="px-3 py-3"
                         type="primary"
-                        onClick={() => {setIsOpenModalCreateNote(true) }}
+                        onClick={() => { setIsOpenModalCreateNote(true) }}
                     />
                 </div>
                 {
@@ -173,7 +174,13 @@ const MyNotes = () => {
             {
                 isOpenModalUser && (
                     <Modal>
-                        <h2 className="text-center font-bold text-xl">{userName}</h2>
+                        <div className="flex items-center justify-center gap-2">
+                            <h2 className="text-center font-bold text-xl">{userName}</h2>
+                            <Button
+                                text={<HiPencil size={18} />}
+                            />
+                        </div>
+                        <span className="text-center">{userEmail}</span>
                         <div className="w-full flex justify-center gap-4 items-center">
                             <Button onClick={() => setIsOpenModalUser(false)} text="Fechar" padding="py-1 px-6" />
                             <Button onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />

@@ -7,6 +7,8 @@ import Button from '../../components/Button';
 import { registerUser } from '../../services/authService';
 import { useState } from 'react';
 import { validateName, validateEmail, validatePassword } from '../../utils/fieldsValidation';
+import { toast } from 'sonner';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
     const [name, setName] = useState<string>('');
@@ -16,6 +18,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
@@ -41,13 +44,15 @@ const Register = () => {
 
         try {
             const response = await registerUser(name, email, password);
-            console.log("Usuário registrado com sucesso:", response);
-            alert("Usuário registrado com sucesso");
-        } catch (error) {
-            console.error("Erro ao registrar usuário:", error);
-            setErrorMessage("Erro ao cadastrar-se.")
+            toast.success("Cadastrado com sucesso!");
+            navigate('/entrar');
+            return response;
+        } catch (error: any) {
+            console.error("Erro ao cadastrar usuário: ", error);
+            setErrorMessage(error);
         }
     };
+
 
     return (
         <div className="flex justify-center items-center h-[100vh]">
@@ -133,7 +138,7 @@ const Register = () => {
                                 </div>
                             </div>
                             {errorMessage && (
-                                <p className="text-red-500 text-center mb-4">{errorMessage}</p>
+                                <p className="text-red-500 text-center mb-2">{errorMessage}</p>
                             )}
                         </div>
                         <Button
@@ -143,7 +148,7 @@ const Register = () => {
                             padding='p-2'
                         />
                         <p className="text-center mt-6">
-                            Já tem uma conta? <a href="/entrar" className="text-[#6F3AB6]">Entrar</a>
+                            Já tem uma conta? <Link to="/entrar" className="text-[#6F3AB6]">Entrar</Link>
                         </p>
                     </form>
                 </aside>

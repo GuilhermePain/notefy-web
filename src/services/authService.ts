@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const registerUser = async (name: string, email: string, password: string) => {
     try {
-        const response = await axios.post('http://localhost:3000/users/signup/', {
+        const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/signup/', {
             name,
             email,
             password
@@ -20,7 +20,7 @@ export const registerUser = async (name: string, email: string, password: string
 
 export const loginUser = async (email: string, password: string) => {
     try {
-        const response = await axios.post('http://localhost:3000/auth/signin', {
+        const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/auth/signin', {
             email,
             password
         });
@@ -40,7 +40,7 @@ export const loginUser = async (email: string, password: string) => {
 
 export const forgotPassword = async (email: string) => {
     try {
-        const response = await axios.post('http://localhost:3000/auth/forgot-password', {
+        const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/auth/forgot-password', {
             email
         });
 

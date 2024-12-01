@@ -55,7 +55,7 @@ const MyNotes = () => {
 
     const getUserBySession = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/users/${userId}`, {
+            const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -69,7 +69,7 @@ const MyNotes = () => {
 
     const getNotes = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/users/${userId}`, {
+            const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -91,7 +91,7 @@ const MyNotes = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:3000/notes/createnote', { title, body: "" }, {
+            const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/createnote', { title, body: "" }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

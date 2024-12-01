@@ -25,7 +25,7 @@ const MyNotesWrite = () => {
 
     const getNote = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/notes/${id}`, {
+            const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
@@ -81,7 +81,7 @@ const MyNotesWrite = () => {
         const body = noteBody;
 
         try {
-            await axios.patch(`http://localhost:3000/notes/${id}`, { body }, {
+            await axios.patch(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/${id}`, { body }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

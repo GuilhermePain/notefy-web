@@ -1,24 +1,23 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useEffect, useState, useRef } from "react";
-import { useQuill } from "react-quilljs";
-import 'quill/dist/quill.snow.css';
+import { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Button from "../../components/Button";
 import { FaChevronLeft } from "react-icons/fa6";
 import { FaSave } from "react-icons/fa";
 import { toast } from "sonner";
 import Modal from "../../components/Modal";
+import { useNavigate } from "react-router-dom";
+import TextEditor from "./components/TextEditor";
 
 const MyNotesWrite = () => {
     const token = Cookies.get('token');
     const [noteTitle, setNoteTitle] = useState<string>("");
     const [noteBody, setNoteBody] = useState<string>("");
-    const { quill, quillRef } = useQuill();
-    const isFirstRender = useRef(true);
-    const [noteChanges, setNoteChanges] = useState<string | null>(null);
     const [originalNoteBody, setOriginalNoteBody] = useState<string>("");
     const [isOpenModalCheckIfChangesWereSaved, setIsOpenModalCheckIfChangesWereSaved] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const path = window.location.pathname.split("/");
     const id = path[2];
@@ -44,38 +43,20 @@ const MyNotesWrite = () => {
         getNote();
     }, []);
 
-    useEffect(() => {
-        if (quill && noteBody && isFirstRender.current) {
-            quill.clipboard.dangerouslyPasteHTML(noteBody);
-
-            const length = quill.getLength();
-            quill.setSelection(length - 1, 0);
-            isFirstRender.current = false;
-        }
-    }, [quill, noteBody]);
-
-    useEffect(() => {
-        if (quill) {
-            quill.on("text-change", () => {
-                const currentHTML = quill.root.innerHTML;
-                setNoteBody(currentHTML);
-                setNoteChanges(currentHTML);
-            });
-        }
-    }, [quill]);
-
-    const checkIfChangesWereSaved = () => {
-        const normalizeContent = (content: string) => {
-            return content.replace(/<p><br><\/p>/g, "").trim();
-        };
-
-        if (normalizeContent(noteChanges || "") !== normalizeContent(originalNoteBody)) {
-            setIsOpenModalCheckIfChangesWereSaved(true);
-        } else {
-            window.location.href = "/minhasnotas";
-        }
+    const normalizeContent = (content: string) => {
+        return content.replace(/<p><br><\/p>/g, "").trim();
     };
 
+    const checkIfChangesWereSaved = () => {
+        const normalizedNoteBody = normalizeContent(noteBody);
+        const normalizedOriginalBody = normalizeContent(originalNoteBody);
+
+        if (normalizedNoteBody === normalizedOriginalBody || normalizedNoteBody === "") {
+            navigate("/minhasnotas");
+        } else {
+            setIsOpenModalCheckIfChangesWereSaved(true);
+        }
+    };
 
     const saveNote = async () => {
         const body = noteBody;
@@ -88,9 +69,7 @@ const MyNotesWrite = () => {
             });
             toast.success("Nota salva com sucesso!");
 
-            // Atualizar o estado original após salvar
             setOriginalNoteBody(body);
-            setNoteChanges(body);
             setIsOpenModalCheckIfChangesWereSaved(false);
         } catch (error) {
             toast.error("Erro ao salvar nota!");
@@ -98,10 +77,9 @@ const MyNotesWrite = () => {
         }
     };
 
-
     const discardChanges = () => {
         setIsOpenModalCheckIfChangesWereSaved(false);
-        window.location.href = "/minhasnotas"
+        navigate("/minhasnotas");
     };
 
     return (
@@ -111,7 +89,11 @@ const MyNotesWrite = () => {
                 buttonRight={<Button type="primary" onClick={saveNote} padding="px-4 py-2" text={<FaSave />} />}
                 title={noteTitle}
             />
-            <div ref={quillRef} className="w-full h-full" />
+
+            <TextEditor
+                value={noteBody}
+                onChange={setNoteBody}
+            />
 
             {isOpenModalCheckIfChangesWereSaved && (
                 <Modal>

@@ -201,7 +201,7 @@ const MyNotes = () => {
             {isOpenModalCreateNote && (
                 <Modal>
                     <h2 className="text-center text-xl font-bold">Criar uma nota</h2>
-                    <Input type="text" placeholder={"titulo da nota"} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
+                    <Input type="text" width="w-full" placeholder={"titulo da nota"} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
                     {
                         errorMessage !== null && (
                             <span className="text-red-500 text-center">

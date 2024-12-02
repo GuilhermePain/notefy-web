@@ -6,7 +6,7 @@ interface IModalProps {
 const Modal = ({ children }: IModalProps) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center w-full h-full bg-[#0000005c] z-50">
-            <div className="bg-white w-[300px] h-auto rounded-xl shadow-xl p-6 flex flex-col gap-5">
+            <div className="bg-white w-[300px] h-auto rounded-xl shadow-xl p-6 flex flex-col items-center justify-center gap-5">
                 {children}
             </div>
         </div>

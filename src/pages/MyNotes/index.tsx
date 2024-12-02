@@ -14,6 +14,7 @@ import { MdStickyNote2 } from "react-icons/md";
 import { HiPencil } from "react-icons/hi2";
 import { toast } from "sonner";
 import { nullField } from "../../utils/fieldsValidation";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 interface IDecodedToken {
     sub: string;
@@ -40,6 +41,7 @@ const MyNotes = () => {
     const [isOpenModalCreateNote, setIsOpenModalCreateNote] = useState<boolean>(false);
     const [isOpenModalUser, setIsOpenModalUser] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -69,6 +71,7 @@ const MyNotes = () => {
 
     const getNotes = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -78,6 +81,8 @@ const MyNotes = () => {
             setNotes(response.data.notes);
         } catch (error) {
             console.log("Erro ao buscar suas notas");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -157,6 +162,7 @@ const MyNotes = () => {
                         onClick={() => { setIsOpenModalCreateNote(true) }}
                     />
                 </div>
+
                 {
                     notes.length > 0 ?
                         <div className="grid grid-cols-2 gap-3 w-full place-items-center mt-5 md:grid-cols-5">
@@ -170,7 +176,11 @@ const MyNotes = () => {
                             ))}
                         </div> : <p className="text-center mt-10">Nenhuma nota encontrada.</p>
                 }
+
             </main>
+            {
+                loading && (<LoadingSpinner />)
+            }
             {
                 isOpenModalUser && (
                     <Modal>
@@ -215,7 +225,6 @@ const MyNotes = () => {
                     </div>
                 </Modal>
             )}
-
         </div>
     )
 }

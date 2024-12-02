@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import Modal from "../../components/Modal";
 import { useNavigate } from "react-router-dom";
 import TextEditor from "./components/TextEditor";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const MyNotesWrite = () => {
     const token = Cookies.get('token');
@@ -16,6 +17,7 @@ const MyNotesWrite = () => {
     const [noteBody, setNoteBody] = useState<string>("");
     const [originalNoteBody, setOriginalNoteBody] = useState<string>("");
     const [isOpenModalCheckIfChangesWereSaved, setIsOpenModalCheckIfChangesWereSaved] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -24,6 +26,7 @@ const MyNotesWrite = () => {
 
     const getNote = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -36,6 +39,8 @@ const MyNotesWrite = () => {
             setOriginalNoteBody(data.body);
         } catch (error) {
             console.error("Erro ao buscar nota:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -59,6 +64,7 @@ const MyNotesWrite = () => {
     };
 
     const saveNote = async () => {
+        setLoading(true);
         const body = noteBody;
 
         try {
@@ -74,6 +80,8 @@ const MyNotesWrite = () => {
         } catch (error) {
             toast.error("Erro ao salvar nota!");
             console.log("Erro ao salvar nota", error);
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -106,6 +114,9 @@ const MyNotesWrite = () => {
                     </div>
                 </Modal>
             )}
+            {
+                loading && (<LoadingSpinner />)
+            }
         </div>
     );
 };

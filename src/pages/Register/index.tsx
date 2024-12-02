@@ -18,6 +18,7 @@ const Register = () => {
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const toggleShowPassword = () => {
@@ -43,6 +44,7 @@ const Register = () => {
         setErrorMessage(null);
 
         try {
+            setLoading(true);
             const response = await registerUser(name, email, password);
             toast.success("Cadastrado com sucesso!");
             navigate('/entrar');
@@ -50,6 +52,8 @@ const Register = () => {
         } catch (error: any) {
             console.error("Erro ao cadastrar usuário: ", error);
             setErrorMessage(error);
+        } finally {
+            setLoading(false);
         }
     };
 

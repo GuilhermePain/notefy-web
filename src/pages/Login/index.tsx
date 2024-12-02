@@ -8,12 +8,15 @@ import { validateEmail, validatePasswordLogin } from "../../utils/fieldsValidati
 import { MdEmail } from "react-icons/md";
 import Cookies from "js-cookie";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import LoadingSpinner from "../../components/LoadingSpinner";
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const toggleShowPassword = () => {
@@ -38,8 +41,8 @@ const Login = () => {
     setErrorMessage(null);
 
     try {
+      setLoading(true);
       const response = await loginUser(email, password);
-      console.log("Usuário logado com sucesso!");
       const token = response.access_token;
       Cookies.set('token', token);
       navigate("/minhasnotas");
@@ -49,6 +52,9 @@ const Login = () => {
       } else {
         setErrorMessage("Erro inesperado ao fazer login.");
       }
+    } finally {
+      setLoading(false);
+      toast.success(`Olá, seja bem-vindo!`);
     }
 
   };
@@ -121,6 +127,9 @@ const Login = () => {
           </form>
         </aside>
       </main>
+      {
+        loading && (<LoadingSpinner />)
+      }
     </div>
   );
 };

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { validateName, validateEmail, validatePassword } from '../../utils/fieldsValidation';
 import { toast } from 'sonner';
 import { Link, useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const Register = () => {
     const [name, setName] = useState<string>('');
@@ -157,6 +158,9 @@ const Register = () => {
                     </form>
                 </aside>
             </main>
+            {
+                loading && (<LoadingSpinner />)
+            }
         </div>
     );
 };

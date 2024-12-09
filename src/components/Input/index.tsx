@@ -9,9 +9,9 @@ interface IIpuntProps {
 
 const Input = ({ type, placeholder, value, onChange, width, icon }: IIpuntProps) => {
     return (
-        <div className="flex shadow-lg rounded-md">
+        <div className={`${width} flex shadow-lg rounded-md`}>
             <input
-                className={`p-4 ${width} rounded-l-md outline-none`}
+                className={`w-full p-4 rounded-l-md outline-none`}
                 type={type}
                 placeholder={placeholder}
                 value={value}

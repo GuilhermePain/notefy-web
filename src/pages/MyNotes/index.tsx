@@ -15,19 +15,7 @@ import { HiPencil } from "react-icons/hi2";
 import { toast } from "sonner";
 import { nullField } from "../../utils/fieldsValidation";
 import LoadingSpinner from "../../components/LoadingSpinner";
-
-interface IDecodedToken {
-    sub: string;
-    name: string;
-    iat: number;
-    exp: number;
-}
-
-interface INote {
-    id: string;
-    title: string;
-    body: string;
-}
+import { IDecodedToken, INote } from "../../@types/types";
 
 const MyNotes = () => {
     const token = Cookies.get('token');
@@ -96,6 +84,8 @@ const MyNotes = () => {
         }
 
         try {
+            setIsOpenModalCreateNote(false);
+            setLoading(true);
             const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/createnote', { title, body: "" }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -111,6 +101,8 @@ const MyNotes = () => {
         } catch (error) {
             toast.error("Erro ao criar nota.");
             console.log("Erro ao criar a nota");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -146,14 +138,14 @@ const MyNotes = () => {
                 buttonRight={<Button onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
             />
             <main className="p-5">
-                <div className="w-full flex justify-between items-center md:justify-end md:gap-4">
+                <div className="w-full flex justify-between items-center md:justify-end gap-2">
                     <Input
                         type="text"
                         placeholder="Buscar..."
                         onChange={(e) => setSearch(e.target.value)}
                         value={search}
                         icon={<IoIosSearch />}
-                        width="w-[250px]"
+                        width="w-full md:w-[300px]"
                     />
                     <Button
                         text={<FaPlus size={24} />}

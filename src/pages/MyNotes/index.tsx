@@ -133,11 +133,11 @@ const MyNotes = () => {
     }, [userId]);
 
     return (
-        <div>
+        <div className="h-screen">
             <Header
                 buttonRight={<Button onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
             />
-            <main className="p-5">
+            <main className="flex-grow p-5">
                 <div className="w-full flex justify-between items-center md:justify-end gap-2">
                     <Input
                         type="text"
@@ -168,6 +168,14 @@ const MyNotes = () => {
                             ))}
                         </div> : <p className="text-center mt-10">Nenhuma nota encontrada.</p>
                 }
+
+            <Button 
+                type="primary"
+                text="✨"
+                position="absolute bottom-10 right-6"
+                width="w-[60px] h-[60px]"
+                rounded="rounded-full"
+            />
 
             </main>
             {

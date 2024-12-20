@@ -135,7 +135,7 @@ const MyNotes = () => {
     return (
         <div className="h-screen">
             <Header
-                buttonRight={<Button onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
+                buttonRight={<Button rounded="rounded-md" onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
             />
             <main className="flex-grow p-5">
                 <div className="w-full flex justify-between items-center md:justify-end gap-2">
@@ -150,6 +150,7 @@ const MyNotes = () => {
                     <Button
                         text={<FaPlus size={24} />}
                         padding="px-3 py-3"
+                        rounded="rounded-md"
                         type="primary"
                         onClick={() => { setIsOpenModalCreateNote(true) }}
                     />
@@ -172,7 +173,7 @@ const MyNotes = () => {
             <Button 
                 type="primary"
                 text="✨"
-                position="absolute bottom-10 right-6"
+                position="fixed bottom-10 right-6"
                 width="w-[60px] h-[60px]"
                 rounded="rounded-full"
             />
@@ -192,8 +193,8 @@ const MyNotes = () => {
                         </div>
                         <span className="text-center">{userEmail}</span>
                         <div className="w-full flex justify-center gap-4 items-center">
-                            <Button onClick={() => setIsOpenModalUser(false)} text="Fechar" padding="py-1 px-6" />
-                            <Button onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />
+                            <Button rounded="rounded-md" onClick={() => setIsOpenModalUser(false)} text="Fechar" padding="py-1 px-6" />
+                            <Button rounded="rounded-md" onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />
                         </div>
                     </Modal>
                 )

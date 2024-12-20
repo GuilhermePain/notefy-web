@@ -93,8 +93,8 @@ const MyNotesWrite = () => {
     return (
         <div className="w-full h-full">
             <Header
-                buttonLeft={<Button onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" padding="px-3 py-1" />}
-                buttonRight={<Button type="primary" onClick={saveNote} padding="px-4 py-2" text={<FaSave />} />}
+                buttonLeft={<Button rounded="rounded-md" onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" padding="px-3 py-1" />}
+                buttonRight={<Button rounded="rounded-md" type="primary" onClick={saveNote} padding="px-4 py-2" text={<FaSave />} />}
                 title={noteTitle}
             />
 
@@ -108,8 +108,8 @@ const MyNotesWrite = () => {
                     <div className="flex flex-col items-center">
                         <h2 className="font-bold text-xl text-center">Você tem alterações não salvas</h2>
                         <div className="flex gap-4 mt-4">
-                            <Button text="Descartar" onClick={discardChanges} padding="px-6 py-1" />
-                            <Button text="Salvar" type="primary" padding="px-6 py-1" onClick={saveNote} />
+                            <Button rounded="rounded-md" text="Descartar" onClick={discardChanges} padding="px-6 py-1" />
+                            <Button rounded="rounded-md" text="Salvar" type="primary" padding="px-6 py-1" onClick={saveNote} />
                         </div>
                     </div>
                 </Modal>

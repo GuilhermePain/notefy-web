@@ -19,7 +19,7 @@ const Button = ({ type, text, iconLeft, iconRight, width, rounded,position, padd
             className={
                 `
                     ${type === 'primary' ? 'bg-[#6F3AB6] text-white border-2 border-transparent active:bg-transparent active:border-[#6F3AB6] active:text-[#6F3AB6]' : 'bg-transparent border-[#6F3AB6] border-2 text-[#6F3AB6] active:bg-[#6F3AB6] active:text-white'}
-                     flex items-center justify-center gap-1 transition-all ${width} ${padding} ${disabled ? 'cursor-not-allowed bg-[#6F3AB6]' : 'cursor-pointer'} ${rounded} ${position} left rounded-md font-clabFont
+                     flex items-center justify-center gap-1 transition-all ${width} ${padding} ${disabled ? 'cursor-not-allowed bg-[#6F3AB6]' : 'cursor-pointer'} ${rounded} ${position} font-clabFont
                     
                 `
             }

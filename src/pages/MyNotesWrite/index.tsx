@@ -101,6 +101,8 @@ const MyNotesWrite = () => {
 
             setOriginalNoteBody(body);
             setIsOpenModalCheckIfChangesWereSaved(false);
+            console.log(setConversa);
+            
         } catch (error) {
             toast.error("Erro ao salvar nota!");
             console.log("Erro ao salvar nota", error);

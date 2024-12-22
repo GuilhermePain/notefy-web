@@ -4,7 +4,7 @@ export const nullField= (field: string, fieldMessage: string) => {
     }
 
     return null;
-}
+};
 
 export const validateName = (name: string): string | null => {
     if (!name.trim()) {
@@ -12,7 +12,7 @@ export const validateName = (name: string): string | null => {
     }
 
     return null;
-}
+};
 
 export const validateEmail = (email: string): string | null => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,4 +52,4 @@ export const validatePasswordLogin = (passwordLogin: string) => {
     if(!passwordLogin) {
         return "A senha é obrigatória.";
     }
-}
+};

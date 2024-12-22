@@ -1,36 +1,44 @@
-import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Header from "../../components/Header";
-import axios from "axios";
 import CardNotes from "../../components/CardNotes";
-import { useNavigate } from "react-router-dom";
 import Input from "../../components/Input";
 import { IoIosSearch } from "react-icons/io";
 import Button from "../../components/Button";
 import { FaPlus } from "react-icons/fa6";
-import { useJwt } from "react-jwt";
 import Modal from "../../components/Modal";
 import { MdStickyNote2 } from "react-icons/md";
 import { HiPencil } from "react-icons/hi2";
-import { toast } from "sonner";
-import { nullField } from "../../utils/fieldsValidation";
 import LoadingSpinner from "../../components/LoadingSpinner";
-import { IDecodedToken, INote } from "../../@types/types";
+import useMyNotes from "../../hooks/useMyNotes";
+import { useNavigate } from "react-router-dom";
 
 const MyNotes = () => {
-    const token = Cookies.get('token');
-    const { decodedToken, isExpired } = useJwt<IDecodedToken>(token || "");
-    const [userId, setUserId] = useState<string | null>(null);
-    const [userName, setUserName] = useState<string>('');
-    const [userEmail, setUserEmail] = useState<string>('');
-    const [notes, setNotes] = useState<INote[]>([]);
-    const [noteTitle, setNoteTitle] = useState('');
-    const [search, setSearch] = useState<string>('');
-    const [isOpenModalCreateNote, setIsOpenModalCreateNote] = useState<boolean>(false);
-    const [isOpenModalUser, setIsOpenModalUser] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
+
+    const { token,
+        decodedToken,
+        isExpired, 
+        userId,
+        setUserId,
+        userName,
+        userEmail,
+        notes,
+        noteTitle,
+        setNoteTitle,
+        search,
+        setSearch,
+        isOpenModalCreateNote,
+        setIsOpenModalCreateNote,
+        isOpenModalUser,
+        setIsOpenModalUser,
+        errorMessage,
+        loading,
+        getUserBySession,
+        getNotes,
+        createNotes,
+        closeModalCreateNote,
+        handleRedirect,
+        logout } = useMyNotes();
 
     useEffect(() => {
         if (!token || isExpired) {
@@ -42,83 +50,6 @@ const MyNotes = () => {
             setUserId(decodedToken.sub);
         }
     }, [decodedToken, isExpired, navigate]);
-
-    const getUserBySession = async () => {
-        try {
-            const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            setUserName(response.data.name);
-            setUserEmail(response.data.email);
-        } catch (error) {
-            console.log("Erro ao buscar nome do usuário da sessão.");
-        }
-    }
-
-    const getNotes = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.get(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            setNotes(response.data.notes);
-        } catch (error) {
-            console.log("Erro ao buscar suas notas");
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const createNotes = async () => {
-        const title = noteTitle;
-        const titleError = nullField(title, "Título da nota é obrigatório.");
-
-        if (titleError) {
-            setErrorMessage(titleError);
-            return;
-        }
-
-        try {
-            setIsOpenModalCreateNote(false);
-            setLoading(true);
-            const response = await axios.post('https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/notes/createnote', { title, body: "" }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            const noteId = response.data.id;
-
-            handleRedirect(noteId);
-
-            toast.success("Nota criada com sucesso!");
-
-        } catch (error) {
-            toast.error("Erro ao criar nota.");
-            console.log("Erro ao criar a nota");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const closeModalCreateNote = () => {
-        setIsOpenModalCreateNote(false);
-        setErrorMessage(null)
-    }
-
-    const handleRedirect = (nota: string) => {
-        navigate(`/minhasnotas/${nota}`);
-    }
-
-    const logout = () => {
-        Cookies.remove('token');
-        window.location.href = '/minhasnotas';
-    };
 
     useEffect(() => {
         if (userId) {

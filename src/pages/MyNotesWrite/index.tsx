@@ -14,6 +14,7 @@ import FloatButton from "../../components/FloatButton";
 import { IoSend } from "react-icons/io5";
 import Input from "../../components/Input";
 import { IoCopy } from "react-icons/io5";
+import { HiSparkles } from "react-icons/hi2";
 
 interface IMensagem {
     remetente: string;
@@ -30,6 +31,7 @@ const MyNotesWrite = () => {
     const [promptAi, setPromptAi] = useState<string>("");
     const [conversa, setConversa] = useState<IMensagem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingGenerateNote, setLoadingGenerateLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -112,9 +114,16 @@ const MyNotesWrite = () => {
     }
 
     const generateNoteWithAi = async () => {
+
+        setPromptAi("");
+        let prompt = promptAi;
+        setConversa(prevConversa => [
+            ...prevConversa,
+            { remetente: "Você", conteudo: prompt },
+        ]);
+        setLoadingGenerateLoading(true);
+
         try {
-            setPromptAi("");
-            let prompt = promptAi;
             const response = await axios.post("https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/ai/generatenote", { prompt }, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -123,12 +132,14 @@ const MyNotesWrite = () => {
 
             setConversa(prevConversa => [
                 ...prevConversa,
-                { remetente: "Você", conteudo: prompt },
                 { remetente: "Assistente de notas", conteudo: response.data }
             ]);
         } catch (error) {
             console.log(error);
-            toast.error("Erro")
+            toast.error("Erro ao gerar nota");
+            setLoadingGenerateLoading(false);
+        } finally {
+            setLoadingGenerateLoading(false);
         }
     }
 
@@ -151,12 +162,12 @@ const MyNotesWrite = () => {
             />
 
             <FloatButton
-                text="✨"
+                text={<HiSparkles color="white" />}
                 onClick={() => setIsOpenModalAi(true)}
             />
 
             {isOpenModalCheckIfChangesWereSaved && (
-                <Modal>
+                <Modal onClick={() => setIsOpenModalCheckIfChangesWereSaved(false)}>
                     <div className="flex flex-col items-center">
                         <h2 className="font-bold text-xl text-center">Você tem alterações não salvas</h2>
                         <div className="flex gap-4 mt-4">
@@ -168,7 +179,7 @@ const MyNotesWrite = () => {
             )}
             {
                 isOpenModalAi && (
-                    <Modal>
+                    <Modal onClick={() => setIsOpenModalAi(false)}>
                         <h2 className="text-center text-xl font-bold">Assistente de notas✨</h2>
                         <div className="w-full h-[350px] flex flex-col gap-2 overflow-y-auto py-1">
                             {
@@ -219,19 +230,6 @@ const MyNotesWrite = () => {
                                 onClick={generateNoteWithAi}
                             />
                         </div>
-                        {/* <div className="flex justify-between items-center gap-4">
-                                <Button
-                                    text="Fechar"
-                                    padding="py-1 px-6"
-
-                                />
-                                <Button
-                                    type="primary"
-                                    text="Criar"
-                                    padding="py-1 px-6"
-
-                                />
-                            </div> */}
                     </Modal>
                 )
             }

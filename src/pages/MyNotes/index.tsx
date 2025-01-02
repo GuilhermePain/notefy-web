@@ -17,7 +17,7 @@ const MyNotes = () => {
 
     const { token,
         decodedToken,
-        isExpired, 
+        isExpired,
         userId,
         setUserId,
         userName,
@@ -25,8 +25,6 @@ const MyNotes = () => {
         notes,
         noteTitle,
         setNoteTitle,
-        search,
-        setSearch,
         isOpenModalCreateNote,
         setIsOpenModalCreateNote,
         isOpenModalUser,
@@ -36,7 +34,6 @@ const MyNotes = () => {
         getUserBySession,
         getNotes,
         createNotes,
-        closeModalCreateNote,
         handleRedirect,
         logout } = useMyNotes();
 
@@ -73,8 +70,7 @@ const MyNotes = () => {
                     <Input
                         type="text"
                         placeholder="Buscar..."
-                        onChange={(e) => setSearch(e.target.value)}
-                        value={search}
+                        value={noteTitle}
                         icon={<IoIosSearch />}
                         width="w-full md:w-[300px]"
                     />
@@ -87,12 +83,13 @@ const MyNotes = () => {
                 </div>
                 {
                     notes.length > 0 ?
-                        <div className="grid grid-cols-2 gap-3 w-full place-items-center mt-5 md:grid-cols-5">
+                        <div className="flex flex-col md:grid md:grid-cols-5 gap-3 w-full md:place-items-center mt-5">
                             {notes.map((notes) => (
                                 <CardNotes
                                     key={notes.id}
                                     id={notes.id}
                                     title={notes.title}
+                                    createdAt={notes.createdAt}
                                     onClick={() => handleRedirect(notes.id)}
                                 />
                             ))}
@@ -103,7 +100,7 @@ const MyNotes = () => {
                 }
                 {
                     isOpenModalUser && (
-                        <Modal>
+                        <Modal onClick={() => setIsOpenModalUser(false)}>
                             <div className="flex items-center justify-center gap-2">
                                 <h2 className="text-center font-bold text-xl">{userName}</h2>
                                 <Button
@@ -111,15 +108,12 @@ const MyNotes = () => {
                                 />
                             </div>
                             <span className="text-center">{userEmail}</span>
-                            <div className="w-full flex justify-center gap-4 items-center">
-                                <Button onClick={() => setIsOpenModalUser(false)} text="Fechar" padding="py-1 px-6" />
-                                <Button onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />
-                            </div>
+                            <Button onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />
                         </Modal>
                     )
                 }
                 {isOpenModalCreateNote && (
-                    <Modal>
+                    <Modal onClick={() => setIsOpenModalCreateNote(false)}>
                         <h2 className="text-center text-xl font-bold">Criar uma nota</h2>
                         <Input type="text" width="w-full" placeholder={"titulo da nota"} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
                         {
@@ -129,20 +123,13 @@ const MyNotes = () => {
                                 </span>
                             )
                         }
-                        <div className="w-full flex justify-center items-center gap-6">
-                            <Button
-                                text="Cancelar"
-                                padding="py-1 px-6"
-                                onClick={closeModalCreateNote}
-                            />
-                            <Button
-                                text="Criar"
-                                iconRight={<FaPlus />}
-                                padding="py-1 px-6"
-                                type="primary"
-                                onClick={createNotes}
-                            />
-                        </div>
+                        <Button
+                            text="Criar"
+                            iconRight={<FaPlus />}
+                            padding="py-1 px-6"
+                            type="primary"
+                            onClick={createNotes}
+                        />
                     </Modal>
                 )}
             </main>

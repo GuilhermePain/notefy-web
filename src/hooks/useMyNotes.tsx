@@ -15,7 +15,6 @@ const useMyNotes = () => {
     const [userEmail, setUserEmail] = useState<string>('');
     const [notes, setNotes] = useState<INote[]>([]);
     const [noteTitle, setNoteTitle] = useState('');
-    const [search, setSearch] = useState<string>('');
     const [isOpenModalCreateNote, setIsOpenModalCreateNote] = useState<boolean>(false);
     const [isOpenModalUser, setIsOpenModalUser] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -46,12 +45,14 @@ const useMyNotes = () => {
             });
 
             setNotes(response.data.notes);
+            console.log(response.data.notes);
+
         } catch (error) {
             console.log("Erro ao buscar suas notas");
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const createNotes = async () => {
         const title = noteTitle;
@@ -85,11 +86,6 @@ const useMyNotes = () => {
         }
     };
 
-    const closeModalCreateNote = () => {
-        setIsOpenModalCreateNote(false);
-        setErrorMessage(null)
-    }
-
     const handleRedirect = (nota: string) => {
         navigate(`/minhasnotas/${nota}`);
     }
@@ -113,8 +109,6 @@ const useMyNotes = () => {
         setNotes,
         noteTitle,
         setNoteTitle,
-        search,
-        setSearch,
         isOpenModalCreateNote,
         setIsOpenModalCreateNote,
         isOpenModalUser,
@@ -126,7 +120,6 @@ const useMyNotes = () => {
         getUserBySession,
         getNotes,
         createNotes,
-        closeModalCreateNote,
         handleRedirect,
         logout,
     }

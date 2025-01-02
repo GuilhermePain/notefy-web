@@ -8,5 +8,6 @@ export interface IDecodedToken {
 export interface INote {
     id: string;
     title: string;
+    createdAt: string;
     body: string;
 }

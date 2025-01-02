@@ -31,7 +31,7 @@ const MyNotesWrite = () => {
     const [promptAi, setPromptAi] = useState<string>("");
     const [conversa, setConversa] = useState<IMensagem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const [loadingGenerateNote, setLoadingGenerateLoading] = useState<boolean>(false);
+    // const [loadingGenerateNote, setLoadingGenerateLoading] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -121,7 +121,7 @@ const MyNotesWrite = () => {
             ...prevConversa,
             { remetente: "Você", conteudo: prompt },
         ]);
-        setLoadingGenerateLoading(true);
+        // setLoadingGenerateLoading(true);
 
         try {
             const response = await axios.post("https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/ai/generatenote", { prompt }, {
@@ -137,9 +137,7 @@ const MyNotesWrite = () => {
         } catch (error) {
             console.log(error);
             toast.error("Erro ao gerar nota");
-            setLoadingGenerateLoading(false);
-        } finally {
-            setLoadingGenerateLoading(false);
+            // setLoadingGenerateLoading(false);
         }
     }
 

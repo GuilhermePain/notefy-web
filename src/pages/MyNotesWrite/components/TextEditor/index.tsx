@@ -17,7 +17,7 @@ const TextEditor = ({ value, onChange }: ITextEditorProps) => {
             [{ 'list': 'ordered' }, { 'list': 'bullet' }],
             [{ 'indent': '-1' }, { 'indent': '+1' }],
             [{ 'align': [] }],
-            ['link', 'image', 'video'],
+            ['link'],
             ['color', 'background'],
             ['script', 'formula'],
             ['code-block'],

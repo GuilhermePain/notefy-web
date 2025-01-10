@@ -232,7 +232,7 @@ const MyNotesWrite = () => {
                                 )
                             }
                         </div>
-                        <div className="flex justify-center gap-2">
+                        <form className="flex justify-center gap-2">
                             <Input
                                 type="text"
                                 value={promptAi}
@@ -247,7 +247,7 @@ const MyNotesWrite = () => {
                                 width="w-[40px] h-[40px]"
                                 onClick={generateNoteWithAi}
                             />
-                        </div>
+                        </form>
                     </Modal>
                 )
             }

@@ -31,7 +31,7 @@ const MyNotesWrite = () => {
     const [promptAi, setPromptAi] = useState<string>("");
     const [conversa, setConversa] = useState<IMensagem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    // const [loadingGenerateNote, setLoadingGenerateLoading] = useState<boolean>(false);
+    const [loadingGenerateNote, setLoadingGenerateNote] = useState<boolean>(false);
 
     const navigate = useNavigate();
 
@@ -114,32 +114,46 @@ const MyNotesWrite = () => {
     }
 
     const generateNoteWithAi = async () => {
-
         setPromptAi("");
-        let prompt = promptAi;
+        const prompt = promptAi;
+
         setConversa(prevConversa => [
             ...prevConversa,
             { remetente: "Você", conteudo: prompt },
         ]);
-        // setLoadingGenerateLoading(true);
+
+        const generatingMessage = { remetente: "Assistente de notas", conteudo: "Gerando nota..." };
+        setConversa(prevConversa => [...prevConversa, generatingMessage]);
+
+        setLoadingGenerateNote(true);
 
         try {
-            const response = await axios.post("https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/ai/generatenote", { prompt }, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
+            const response = await axios.post(
+                "https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/ai/generatenote",
+                { prompt },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
                 }
-            });
+            );
 
-            setConversa(prevConversa => [
-                ...prevConversa,
-                { remetente: "Assistente de notas", conteudo: response.data }
-            ]);
+            setConversa(prevConversa =>
+                prevConversa.filter(mensagem => mensagem !== generatingMessage).concat({
+                    remetente: "Assistente de notas",
+                    conteudo: response.data,
+                })
+            );
         } catch (error) {
-            console.log(error);
             toast.error("Erro ao gerar nota");
-            // setLoadingGenerateLoading(false);
+
+            setConversa(prevConversa =>
+                prevConversa.filter(mensagem => mensagem !== generatingMessage)
+            );
+        } finally {
+            setLoadingGenerateNote(false);
         }
-    }
+    };
 
     const insertInNote = (text: string) => {
         setNoteBody(prevBody => prevBody + " " + text);
@@ -191,19 +205,25 @@ const MyNotesWrite = () => {
                                             {
                                                 mensagem.remetente === "Assistente de notas" && (
                                                     <div className="flex gap-1 mt-2">
-                                                        <Button
-                                                            type="primary"
-                                                            text={<IoCopy />}
-                                                            padding="p-1"
-                                                            onClick={() => copyToClipboard(mensagem.conteudo)}
-                                                        />
-                                                        <Button
-                                                            type="primary"
-                                                            text="Inserir na nota"
-                                                            size="text-[0.9rem]"
-                                                            padding="p-1"
-                                                            onClick={() => insertInNote(mensagem.conteudo)}
-                                                        />
+                                                        {
+                                                            !loadingGenerateNote && (
+                                                                <>
+                                                                    <Button
+                                                                        type="primary"
+                                                                        text={<IoCopy />}
+                                                                        padding="p-1"
+                                                                        onClick={() => copyToClipboard(mensagem.conteudo)}
+                                                                    />
+                                                                    <Button
+                                                                        type="primary"
+                                                                        text="Inserir na nota"
+                                                                        size="text-[0.9rem]"
+                                                                        padding="p-1"
+                                                                        onClick={() => insertInNote(mensagem.conteudo)}
+                                                                    />
+                                                                </>
+                                                            )
+                                                        }
                                                     </div>
                                                 )
                                             }

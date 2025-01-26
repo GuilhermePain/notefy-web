@@ -147,10 +147,7 @@ const Register = () => {
                             )}
                         </div>
                         <Button
-                            type='primary'
                             text="Cadastrar"
-                            width="w-full"
-                            padding='p-2'
                         />
                         <p className="text-center mt-6">
                             Já tem uma conta? <Link to="/entrar" className="text-[#6F3AB6]">Entrar</Link>

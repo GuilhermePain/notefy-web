@@ -31,8 +31,6 @@ const ResetPassword = () => {
                         </div>
                         <Button
                             text="Redefinir"
-                            width="w-full"
-                            padding='p-2'
                         />
                     </form>
                 </aside>

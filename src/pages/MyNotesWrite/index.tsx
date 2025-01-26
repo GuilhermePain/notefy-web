@@ -163,8 +163,8 @@ const MyNotesWrite = () => {
     return (
         <div className="w-full h-full">
             <Header
-                buttonLeft={<Button onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" padding="px-3 py-1" />}
-                buttonRight={<Button type="primary" onClick={saveNote} padding="px-4 py-2" text={<FaSave />} />}
+                buttonLeft={<Button onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" />}
+                buttonRight={<Button onClick={saveNote} text={<FaSave />} />}
                 title={noteTitle}
             />
 
@@ -183,8 +183,8 @@ const MyNotesWrite = () => {
                     <div className="flex flex-col items-center">
                         <h2 className="font-bold text-xl text-center">Você tem alterações não salvas</h2>
                         <div className="flex gap-4 mt-4">
-                            <Button text="Descartar" onClick={discardChanges} padding="px-6 py-1" />
-                            <Button text="Salvar" type="primary" padding="px-6 py-1" onClick={saveNote} />
+                            <Button text="Descartar" type="secondary" onClick={discardChanges} />
+                            <Button text="Salvar" onClick={saveNote} />
                         </div>
                     </div>
                 </Modal>
@@ -209,16 +209,14 @@ const MyNotesWrite = () => {
                                                             !loadingGenerateNote && (
                                                                 <>
                                                                     <Button
-                                                                        type="primary"
-                                                                        text={<IoCopy />}
-                                                                        padding="p-1"
+                                                                        text={<IoCopy size={20} />}
+                                                                        type="third"
+                                                                        size="onlyContent"
                                                                         onClick={() => copyToClipboard(mensagem.conteudo)}
                                                                     />
                                                                     <Button
-                                                                        type="primary"
                                                                         text="Inserir na nota"
-                                                                        size="text-[0.9rem]"
-                                                                        padding="p-1"
+                                                                        size="onlyContent"
                                                                         onClick={() => insertInNote(mensagem.conteudo)}
                                                                     />
                                                                 </>
@@ -241,10 +239,8 @@ const MyNotesWrite = () => {
                                 width="h-[40px]"
                             />
                             <Button
-                                type="primary"
                                 disabled={!promptAi}
                                 text={<IoSend />}
-                                width="w-[40px] h-[40px]"
                                 onClick={generateNoteWithAi}
                             />
                         </form>

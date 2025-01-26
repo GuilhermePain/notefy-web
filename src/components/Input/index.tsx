@@ -1,6 +1,6 @@
 interface IIpuntProps {
     type: string;
-    placeholder: string;
+    placeholder?: string;
     value: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     width?: string;

@@ -91,10 +91,7 @@ const ForgotPassword = () => {
                             )}
                         </div>
                         <Button
-                            type="primary"
                             text="Enviar"
-                            width="w-full"
-                            padding='p-2'
                             disabled={counter > 0} // Desabilitar botão durante o contador
                         />
                         <p className="text-center mt-6">

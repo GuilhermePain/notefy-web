@@ -116,10 +116,7 @@ const Login = () => {
               )}
             </div>
             <Button
-              type="primary"
               text="Entrar"
-              width="w-full"
-              padding='p-2'
             />
             <p className="text-center mt-6">
               Não tem uma conta? <Link to="/cadastro" className="text-[#6F3AB6]">Cadastre-se</Link>

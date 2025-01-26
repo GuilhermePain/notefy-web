@@ -21,6 +21,8 @@ const MyNotes = () => {
         userId,
         setUserId,
         userName,
+        userNameEdited,
+        setUserNameEdited,
         userEmail,
         notes,
         noteTitle,
@@ -29,13 +31,19 @@ const MyNotes = () => {
         setIsOpenModalCreateNote,
         isOpenModalUser,
         setIsOpenModalUser,
+        isOpenModalEditNoteTitle,
+        setIsOpenModalEditNoteTitle,
+        isOpenInputEditUsername,
+        setIsOpenInputEditUsername,
         errorMessage,
         loading,
         getUserBySession,
         getNotes,
         createNotes,
         handleRedirect,
-        logout } = useMyNotes();
+        logout,
+        editUserName,
+        handleCloseModalEditUserName } = useMyNotes();
 
     useEffect(() => {
         if (!token || isExpired) {
@@ -63,7 +71,7 @@ const MyNotes = () => {
     return (
         <div className="h-screen">
             <Header
-                buttonRight={<Button onClick={() => setIsOpenModalUser(true)} type="primary" text={userName} padding="px-4 py-1" />}
+                buttonRight={<Button onClick={() => setIsOpenModalUser(true)} text={userName} />}
             />
             <main className="flex-grow p-5">
                 <div className="w-full flex justify-between items-center md:justify-end gap-2">
@@ -75,9 +83,8 @@ const MyNotes = () => {
                         width="w-full md:w-[300px]"
                     />
                     <Button
-                        text={<FaPlus size={24} />}
-                        padding="px-3 py-3"
-                        type="primary"
+                        text={<FaPlus size={22} />}
+                        size="square"
                         onClick={() => { setIsOpenModalCreateNote(true) }}
                     />
                 </div>
@@ -90,7 +97,8 @@ const MyNotes = () => {
                                     id={notes.id}
                                     title={notes.title}
                                     createdAt={notes.createdAt}
-                                    onClick={() => handleRedirect(notes.id)}
+                                    onDestination={() => handleRedirect(notes.id)}
+                                    onEditNoteTitle={() => setIsOpenModalEditNoteTitle(true)}
                                 />
                             ))}
                         </div> : <p className="text-center mt-10">Nenhuma nota encontrada.</p>
@@ -101,21 +109,64 @@ const MyNotes = () => {
                 {
                     isOpenModalUser && (
                         <Modal onClick={() => setIsOpenModalUser(false)}>
-                            <div className="flex items-center justify-center gap-2">
-                                <h2 className="text-center font-bold text-xl">{userName}</h2>
-                                <Button
-                                    text={<HiPencil size={18} />}
-                                />
+                            <div className="flex flex-col items-center justify-center gap-2">
+                                {
+                                    !isOpenInputEditUsername && (
+                                        <>
+                                            <div className="flex gap-1">
+                                                <h2 className="text-center font-bold text-xl">{userName}</h2>
+                                                <Button
+                                                    type="third"
+                                                    size="onlyContent"
+                                                    text={<HiPencil size={18} />}
+                                                    onClick={() => setIsOpenInputEditUsername(true)}
+                                                />
+                                            </div>
+                                            <span className="text-center">{userEmail}</span>
+                                            <Button onClick={logout} text="Sair" />
+                                        </>
+                                    )
+                                }
+                                {
+                                    isOpenInputEditUsername && (
+                                        <>
+                                            <h2 className="text-center font-bold text-xl">Editar nome</h2>
+                                            <Input
+                                                type="text"
+                                                placeholder="Digite seu novo nome..."
+                                                value={userNameEdited}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUserNameEdited(e.target.value)}
+                                            />
+                                            {
+                                                errorMessage !== null && (
+                                                    <span className="text-red-500 text-center">
+                                                        {errorMessage}
+                                                    </span>
+                                                )
+                                            }
+                                            <div className="flex gap-4 mt-2">
+                                                <Button
+                                                    text="Cancelar"
+                                                    type="secondary"
+                                                    onClick={handleCloseModalEditUserName}
+                                                />
+                                                <Button
+                                                    text="Editar"
+                                                    iconRight={<HiPencil />}
+                                                    onClick={() => editUserName()}
+                                                />
+                                            </div>
+                                        </>
+                                    )
+                                }
                             </div>
-                            <span className="text-center">{userEmail}</span>
-                            <Button onClick={logout} text="Sair" type="primary" padding="py-1 px-6" />
                         </Modal>
                     )
                 }
                 {isOpenModalCreateNote && (
                     <Modal onClick={() => setIsOpenModalCreateNote(false)}>
                         <h2 className="text-center text-xl font-bold">Criar uma nota</h2>
-                        <Input type="text" width="w-full" placeholder={"titulo da nota"} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
+                        <Input type="text" width="w-full" placeholder={"Título da nota..."} value={noteTitle} onChange={(e) => setNoteTitle(e.target.value)} icon={<MdStickyNote2 />} />
                         {
                             errorMessage !== null && (
                                 <span className="text-red-500 text-center">
@@ -126,12 +177,17 @@ const MyNotes = () => {
                         <Button
                             text="Criar"
                             iconRight={<FaPlus />}
-                            padding="py-1 px-6"
-                            type="primary"
                             onClick={createNotes}
                         />
                     </Modal>
                 )}
+                {
+                    isOpenModalEditNoteTitle && (
+                        <Modal onClick={() => setIsOpenModalEditNoteTitle(false)}>
+                            <h1>Olá</h1>
+                        </Modal>
+                    )
+                }
             </main>
         </div>
     )

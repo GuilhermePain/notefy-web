@@ -12,11 +12,14 @@ const useMyNotes = () => {
     const { decodedToken, isExpired } = useJwt<IDecodedToken>(token || "");
     const [userId, setUserId] = useState<string | null>(null);
     const [userName, setUserName] = useState<string>('');
+    const [userNameEdited, setUserNameEdited] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
     const [notes, setNotes] = useState<INote[]>([]);
-    const [noteTitle, setNoteTitle] = useState('');
+    const [noteTitle, setNoteTitle] = useState<string>('');
     const [isOpenModalCreateNote, setIsOpenModalCreateNote] = useState<boolean>(false);
     const [isOpenModalUser, setIsOpenModalUser] = useState<boolean>(false);
+    const [isOpenModalEditNoteTitle, setIsOpenModalEditNoteTitle] = useState<boolean>(false);
+    const [isOpenInputEditUsername, setIsOpenInputEditUsername] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const navigate = useNavigate();
@@ -63,6 +66,8 @@ const useMyNotes = () => {
             return;
         }
 
+        setErrorMessage("");
+
         try {
             setIsOpenModalCreateNote(false);
             setLoading(true);
@@ -95,6 +100,46 @@ const useMyNotes = () => {
         window.location.href = '/minhasnotas';
     };
 
+    const editUserName = async () => {
+        let name = userNameEdited;
+        const nameError = nullField(name, "O novo nome é obrigatório.");
+
+        if (nameError) {
+            setErrorMessage(nameError);
+            return;
+        }
+
+        setErrorMessage("");
+
+        try {
+            setIsOpenModalUser(false);
+            setLoading(true);
+            await axios.patch(`https://conservative-violette-guilhermerocha-4c0b4e6a.koyeb.app/users/${userId}`, {
+                name
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            toast.success('Nome editado com sucesso!');
+            console.log('Nome editado com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao editar nome.');
+            console.log('Erro ao editar nome', error);
+            setIsOpenModalUser(true);
+            setLoading(false);
+        } finally {
+            setLoading(false);
+            setIsOpenInputEditUsername(false);
+            setIsOpenModalUser(false);
+        }
+    };
+
+    const handleCloseModalEditUserName = () => {
+        setIsOpenInputEditUsername(false);
+        setErrorMessage("");
+    };
+
     return {
         token,
         decodedToken,
@@ -103,6 +148,8 @@ const useMyNotes = () => {
         setUserId,
         userName,
         setUserName,
+        userNameEdited,
+        setUserNameEdited,
         userEmail,
         setUserEmail,
         notes,
@@ -113,6 +160,10 @@ const useMyNotes = () => {
         setIsOpenModalCreateNote,
         isOpenModalUser,
         setIsOpenModalUser,
+        isOpenModalEditNoteTitle,
+        setIsOpenModalEditNoteTitle,
+        isOpenInputEditUsername,
+        setIsOpenInputEditUsername,
         errorMessage,
         setErrorMessage,
         loading,
@@ -122,6 +173,8 @@ const useMyNotes = () => {
         createNotes,
         handleRedirect,
         logout,
+        editUserName,
+        handleCloseModalEditUserName
     }
 }
 

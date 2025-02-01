@@ -5,12 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { useJwt } from "react-jwt";
 import { toast } from "sonner";
 import { nullField } from "../utils/fieldsValidation";
-import { IDecodedToken, INote } from "../@types/types";
+import { IToken, INote } from "../@types/types";
+import useToken from "./useToken";
 
 const useMyNotes = () => {
+
+    const { decodedToken, isExpired } = useToken();
+
     const token = Cookies.get('token');
-    const { decodedToken, isExpired } = useJwt<IDecodedToken>(token || "");
-    const [userId, setUserId] = useState<string | null>(null);
+    // const { decodedToken, isExpired } = useJwt<IToken>(token || "");
+    // const [userId, setUserId] = useState<string | null>(null);
+    const userId = decodedToken?.sub || "";
     const [userName, setUserName] = useState<string>('');
     const [userNameEdited, setUserNameEdited] = useState<string>('');
     const [userEmail, setUserEmail] = useState<string>('');
@@ -145,7 +150,7 @@ const useMyNotes = () => {
         decodedToken,
         isExpired,
         userId,
-        setUserId,
+        // setUserId,
         userName,
         setUserName,
         userNameEdited,

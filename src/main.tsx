@@ -12,7 +12,9 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MyNotes from "./pages/MyNotes";
 import MyNotesWrite from "./pages/MyNotesWrite";
+import { PrivateRoute } from "./routes/PrivateRoute";
 import { Toaster } from "sonner";
+import { AuthProvider } from "./context/AuthContext";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/minhasnotas",
-    element: <MyNotes />
+    element: <PrivateRoute><MyNotes /></PrivateRoute>
   },
   {
     path: "minhasnotas/:id",
@@ -47,13 +49,15 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <Toaster position="top-center" toastOptions={{
-      style: {
-        background: '#6F3AB6',
-        color: 'white'
-      }
-    }}
-    />
+    <AuthProvider>
+      <RouterProvider router={router} />
+      <Toaster position="top-center" toastOptions={{
+        style: {
+          background: '#6F3AB6',
+          color: 'white'
+        }
+      }}
+      />
+    </AuthProvider>
   </React.StrictMode>
 );

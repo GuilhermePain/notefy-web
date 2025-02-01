@@ -164,7 +164,7 @@ const MyNotesWrite = () => {
         <div className="w-full h-full">
             <Header
                 buttonLeft={<Button onClick={checkIfChangesWereSaved} iconLeft={<FaChevronLeft size={12} />} text="Voltar" />}
-                buttonRight={<Button onClick={saveNote} text="Salvar" iconRight={<FaSave />} />}
+                buttonRight={<Button onClick={saveNote} text={<FaSave size={20} />} />}
                 title={noteTitle}
             />
 

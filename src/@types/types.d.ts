@@ -1,4 +1,4 @@
-export interface IDecodedToken {
+export interface IToken {
     sub: string;
     name: string;
     iat: number;

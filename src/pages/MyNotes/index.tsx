@@ -9,6 +9,7 @@ import Modal from "../../components/Modal";
 import { MdStickyNote2 } from "react-icons/md";
 import { HiPencil } from "react-icons/hi2";
 import LoadingSpinner from "../../components/LoadingSpinner";
+import { IoLogOut } from "react-icons/io5";
 import useMyNotes from "../../hooks/useMyNotes";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +20,7 @@ const MyNotes = () => {
         decodedToken,
         isExpired,
         userId,
-        setUserId,
+        // setUserId,
         userName,
         userNameEdited,
         setUserNameEdited,
@@ -45,16 +46,15 @@ const MyNotes = () => {
         editUserName,
         handleCloseModalEditUserName } = useMyNotes();
 
-    useEffect(() => {
-        if (!token || isExpired) {
-            navigate("/entrar");
-            return;
-        }
-
-        if (decodedToken && decodedToken.sub) {
-            setUserId(decodedToken.sub);
-        }
-    }, [decodedToken, isExpired, navigate]);
+    // useEffect(() => {
+    //     if (!token || isExpired) {
+    //         navigate("/entrar");
+    //         return;
+    //     }
+    //     if (decodedToken && decodedToken.sub) {
+    //         setUserId(decodedToken.sub);
+    //     }
+    // }, [decodedToken, isExpired, navigate]);
 
     useEffect(() => {
         if (userId) {
@@ -123,7 +123,7 @@ const MyNotes = () => {
                                                 />
                                             </div>
                                             <span className="text-center">{userEmail}</span>
-                                            <Button onClick={logout} text="Sair" />
+                                            <Button onClick={logout} text="Sair" iconRight={<IoLogOut />} />
                                         </>
                                     )
                                 }

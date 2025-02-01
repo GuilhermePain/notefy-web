@@ -13,11 +13,6 @@ interface ICardNotesProps {
 
 const CardNotes = ({ id, title, createdAt, onDestination, onEditNoteTitle }: ICardNotesProps) => {
 
-    const handleEditClick = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        onEditNoteTitle();
-    };
-
     return (
         <div
             key={id}
@@ -34,7 +29,10 @@ const CardNotes = ({ id, title, createdAt, onDestination, onEditNoteTitle }: ICa
                     type="third"
                     size="onlyContent"
                     text={<HiPencil />}
-                    onClick={() => handleEditClick}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        
+                    }}
                 />
             </div>
             <div className="flex flex-col text-sm items-start w-full">

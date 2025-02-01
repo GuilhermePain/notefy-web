@@ -11,14 +11,15 @@ import { HiPencil } from "react-icons/hi2";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { IoLogOut } from "react-icons/io5";
 import useMyNotes from "../../hooks/useMyNotes";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const MyNotes = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
-    const { token,
-        decodedToken,
-        isExpired,
+    const { 
+        // token,
+        // decodedToken,
+        // isExpired,
         userId,
         // setUserId,
         userName,

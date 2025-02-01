@@ -2,10 +2,10 @@ import Cookies from "js-cookie";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useJwt } from "react-jwt";
+// import { useJwt } from "react-jwt";
 import { toast } from "sonner";
 import { nullField } from "../utils/fieldsValidation";
-import { IToken, INote } from "../@types/types";
+import { INote } from "../@types/types";
 import useToken from "./useToken";
 
 const useMyNotes = () => {
